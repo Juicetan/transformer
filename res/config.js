@@ -1,6 +1,9 @@
 
 var DefaultConfig = {
-  fields: []
+  delimiter: ',',
+  fields: {
+    
+  }
 };
 
 module.exports = DefaultConfig;
