@@ -17,16 +17,24 @@ yargs.command('transform <source> [destination]','Transform your flat delimited 
     default: __dirname
   });
 }, function(argv){
-  var validation = new Validation();
+  var resolvedConfigPath;
+
   FileUtil.checkFile(argv.source).then(function(){
     return FileUtil.checkDirectory(argv.destination, true);
   }).then(function(){
-    console.log('> config', argv.config);
+    resolvedConfigPath = __dirname+'/transform.json';
+    if(argv.config){
+      resolvedConfigPath = argv.config;
+    }
+    return FileUtil.checkFile(resolvedConfigPath);
+  }).then(function(){
     var filename = Path.basename(argv.source);
     var filenameSplit = filename.split('.');
     filename = filenameSplit[0]+'-autobot-'+Date.now()+'.'+filenameSplit[1];
     
-    // ParseController.parse(argv.source, argv.destination+'/'+filename);
+    var config = ConfigController.resolveConfig(argv.config);
+    ParseController.parse(argv.source, argv.destination+'/'+filename, config);
+    console.log('> hrmm', config);
   }).catch(function(e){
     console.log('> ',e);
   });
@@ -35,7 +43,7 @@ yargs.command('transform <source> [destination]','Transform your flat delimited 
 yargs.option('config', {
   alias: 'c',
   describe: 'Path to configuration file.  If none is provided the current working directory'
-})
+});
 
 
 yargs.help().argv;
