@@ -1,8 +1,14 @@
 
 var DefaultConfig = {
-  delimiter: ',',
-  fields: {
-    
+  parse: {
+    delimiter: ',',
+    maxRows: null
+  },
+  transform: {
+    delimiter: ',',
+    fieldMap: {
+
+    }
   }
 };
 

@@ -2,12 +2,11 @@ var Path = require('path');
 
 var yargs = require('yargs');
 
-var Validation = require('./lib/models/validation');
 var FileUtil = require('./lib/utils/file');
 var ParseController = require('./lib/controllers/parser');
 var ConfigController = require('./lib/controllers/config');
 
-yargs.command('transform <source> [destination]','Transform your flat delimited flat files', function(yargs){
+yargs.command('* <source> [destination]','Transform your flat delimited flat files', function(yargs){
   yargs.positional('source', {
     describe: 'Path to source file to be transformed.',
     type: 'string'
@@ -22,7 +21,7 @@ yargs.command('transform <source> [destination]','Transform your flat delimited 
   FileUtil.checkFile(argv.source).then(function(){
     return FileUtil.checkDirectory(argv.destination, true);
   }).then(function(){
-    resolvedConfigPath = __dirname+'/transform.json';
+    resolvedConfigPath = __dirname+'/'+ConfigController.FILENAME;
     if(argv.config){
       resolvedConfigPath = argv.config;
     }
@@ -34,15 +33,28 @@ yargs.command('transform <source> [destination]','Transform your flat delimited 
     
     var config = ConfigController.resolveConfig(argv.config);
     ParseController.parse(argv.source, argv.destination+'/'+filename, config);
-    console.log('> hrmm', config);
   }).catch(function(e){
     console.log('> ',e);
   });
 });
 
+yargs.command('config [destination]', 'Create a configuration file for transformer.', function(yargs){
+  yargs.positional('destination', {
+    describe: 'Path to create configuration file template.',
+    type: 'string',
+    default: __dirname
+  });
+}, function(argv){
+  FileUtil.checkFile(argv.destination, true).then(function(){
+    ConfigController.createConfig(argv.destination);
+  }).catch(function(e){
+    console.log('> ', e);
+  });
+});
+
 yargs.option('config', {
   alias: 'c',
-  describe: 'Path to configuration file.  If none is provided the current working directory'
+  describe: 'Path to configuration file.  If none is provided the current working directory will be used.'
 });
 
 
