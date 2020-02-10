@@ -13,7 +13,7 @@ yargs.command('* <source> [destination]','Transform your flat delimited flat fil
   }).positional('destination', {
     describe: 'Path to destination to place transformed file.',
     type: 'string',
-    default: __dirname
+    default: process.cwd()
   });
 }, function(argv){
   var resolvedConfigPath;
@@ -21,7 +21,7 @@ yargs.command('* <source> [destination]','Transform your flat delimited flat fil
   FileUtil.checkFile(argv.source).then(function(){
     return FileUtil.checkDirectory(argv.destination, true);
   }).then(function(){
-    resolvedConfigPath = __dirname+'/'+ConfigController.FILENAME;
+    resolvedConfigPath = process.cwd()+'/'+ConfigController.FILENAME;
     if(argv.config){
       resolvedConfigPath = argv.config;
     }
@@ -42,7 +42,7 @@ yargs.command('config [destination]', 'Create a configuration file for transform
   yargs.positional('destination', {
     describe: 'Path to create configuration file template.',
     type: 'string',
-    default: __dirname
+    default: process.cwd()
   });
 }, function(argv){
   FileUtil.checkFile(argv.destination, true).then(function(){
