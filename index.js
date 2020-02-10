@@ -31,7 +31,7 @@ yargs.command('* <source> [destination]','Transform your flat delimited flat fil
     var filenameSplit = filename.split('.');
     filename = filenameSplit[0]+'-autobot-'+Date.now()+'.'+filenameSplit[1];
     
-    var config = ConfigController.resolveConfig(argv.config);
+    var config = ConfigController.resolveConfig(resolvedConfigPath);
     ParseController.parse(argv.source, argv.destination+'/'+filename, config);
   }).catch(function(e){
     console.log('> ',e);
