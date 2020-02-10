@@ -6,9 +6,19 @@ var DefaultConfig = {
   },
   transform: {
     delimiter: ',',
-    fieldMap: {
-
-    }
+    fieldMap: [
+      /**
+       * // Note that order of fieldKeys is relevant
+       *  {
+       *    key: 'newKeyName',
+       *    value: function(rowObj){
+       *    }
+       *  },{
+       *    key: 'anotherKeyName',
+       *    value: 10
+       *  }
+       */
+    ]
   }
 };
 
