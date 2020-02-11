@@ -12,10 +12,15 @@ var DefaultConfig = {
        *  {
        *    key: 'newKeyName',
        *    value: function(rowObj){
+       *      return // transformation
        *    }
        *  },{
        *    key: 'anotherKeyName',
-       *    value: 10
+       *    value: 10,
+       *    static: true
+       *  },{
+       *    key: 'oneMoreKeyName',
+       *    value: 'originalKeyName'
        *  }
        */
     ]
