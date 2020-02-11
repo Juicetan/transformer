@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "A Node JS command line tool to perform transformations on delimited value flat files.",
   "main": "index.js",
+  "bin": {
+    "etlbot": "index.js"
+  },
   "dependencies": {
     "fast-csv": "^4.0.2",
     "yargs": "^15.1.0"
