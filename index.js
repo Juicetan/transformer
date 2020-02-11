@@ -6,7 +6,7 @@ var FileUtil = require('./lib/utils/file');
 var ParseController = require('./lib/controllers/parser');
 var ConfigController = require('./lib/controllers/config');
 
-yargs.command('* <source> [destination]','Transform your flat delimited flat files', function(yargs){
+yargs.command('transform <source> [destination]','Transform your flat delimited flat files', function(yargs){
   yargs.positional('source', {
     describe: 'Path to source file to be transformed.',
     type: 'string'
@@ -32,7 +32,7 @@ yargs.command('* <source> [destination]','Transform your flat delimited flat fil
   }).then(function(){
     var filename = Path.basename(argv.source);
     var filenameSplit = filename.split('.');
-    filename = filenameSplit[0]+'-autobot-'+Date.now()+'.'+filenameSplit[1];
+    filename = filenameSplit[0]+'-etlbot-'+Date.now()+'.'+filenameSplit[1];
     
     var config = ConfigController.resolveConfig(resolvedConfigPath);
     ParseController.parse(argv.source, argv.destination+'/'+filename, config);
