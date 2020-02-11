@@ -24,6 +24,9 @@ yargs.command('* <source> [destination]','Transform your flat delimited flat fil
     resolvedConfigPath = process.cwd()+'/'+ConfigController.FILENAME;
     if(argv.config){
       resolvedConfigPath = argv.config;
+      if(argv.config.charAt(0) === '.'){
+        resolvedConfigPath = process.cwd() + '/' + resolvedConfigPath;
+      }
     }
     return FileUtil.checkFile(resolvedConfigPath);
   }).then(function(){
