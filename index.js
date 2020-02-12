@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 var Path = require('path');
 
 var yargs = require('yargs');
