@@ -1,6 +1,6 @@
 {
   "name": "etlbot",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A Node JS command line tool to perform transformations on delimited value flat files.",
   "main": "index.js",
   "bin": {
