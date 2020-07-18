@@ -24,7 +24,25 @@ var DefaultConfig = {
        *  }
        */
     ]
-  }
+  },
+  cache: [
+    /**
+     *  {
+     *    key: 'cacheKey',
+     *    value: function(rowObj){
+     *      return // value to cache
+     *    }
+     *  },{
+     *    key: 'anotherCacheKeyName',
+     *    value: 10,
+     *    static: true
+     *  },{
+     *    key: 'oneMoreCacheKeyName',
+     *    value: 'originalKeyName'
+     *  }
+     */
+  ],
+  filter: []
 };
 
 module.exports = DefaultConfig;
