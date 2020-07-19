@@ -30,7 +30,20 @@ var DefaultConfig = {
       /**
        *  {
        *    key: 'cacheKey',
-       *    value: function(rowObj){
+       *    value: function(rowObj, cache){
+       *      return // value to cache
+       *    },
+       *    staticKey: true
+       *  },{
+       *    key: function(rowObj){
+       *      return // cache key
+       *    },
+       *    value: function(rowObj, cache){
+       *      return // value to cache
+       *    }
+       *  },{
+       *    key: 'oldCacheKeyReference'
+       *    value: function(rowObj, cache){
        *      return // value to cache
        *    }
        *  },{
