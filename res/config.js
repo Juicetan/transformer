@@ -35,7 +35,7 @@ var DefaultConfig = {
        *    },
        *    staticKey: true
        *  },{
-       *    key: function(rowObj){
+       *    key: function(rowObj, cache){
        *      return // cache key
        *    },
        *    value: function(rowObj, cache){
