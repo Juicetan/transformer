@@ -57,7 +57,7 @@ var DefaultConfig = {
        */
     ]
   },
-  filter: []
+  filter: function(){}
 };
 
 module.exports = DefaultConfig;
