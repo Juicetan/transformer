@@ -25,23 +25,25 @@ var DefaultConfig = {
        */
     ]
   },
-  cache: [
-    /**
-     *  {
-     *    key: 'cacheKey',
-     *    value: function(rowObj){
-     *      return // value to cache
-     *    }
-     *  },{
-     *    key: 'anotherCacheKeyName',
-     *    value: 10,
-     *    static: true
-     *  },{
-     *    key: 'oneMoreCacheKeyName',
-     *    value: 'originalKeyName'
-     *  }
-     */
-  ],
+  cache: {
+    fieldMap: [
+      /**
+       *  {
+       *    key: 'cacheKey',
+       *    value: function(rowObj){
+       *      return // value to cache
+       *    }
+       *  },{
+       *    key: 'anotherCacheKeyName',
+       *    value: 10,
+       *    static: true
+       *  },{
+       *    key: 'oneMoreCacheKeyName',
+       *    value: 'originalKeyName'
+       *  }
+       */
+    ]
+  },
   filter: []
 };
 
