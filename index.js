@@ -72,7 +72,7 @@ yargs.command('cache <source> [destination]', 'Build a cache of key value pairs 
     }).catch(function(e){
       console.log('> directory not found', resolvedCachePath);
       console.log('> creating cache directory', resolvedCachePath);
-      // FS.mkdirSync(process.cwd);
+      FS.mkdirSync(resolvedCachePath);
       def.resolve();
     });
     return def.promise;
