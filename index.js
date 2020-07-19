@@ -8,8 +8,10 @@ var FileUtil = require('./lib/utils/file');
 var ParseController = require('./lib/controllers/parser');
 var ConfigController = require('./lib/controllers/config');
 var CacheController = require('./lib/controllers/cache');
+var FilterController = require('./lib/controllers/filter');
 const Deferred = require('./lib/models/deferred');
 const FS = require('fs');
+const FileStore = require('./lib/models/fileStore');
 
 yargs.command('transform <source> [destination]','Transform your delimited flat files', function(yargs){
   yargs.positional('source', {
@@ -41,6 +43,56 @@ yargs.command('transform <source> [destination]','Transform your delimited flat 
     
     var config = ConfigController.resolveConfig(resolvedConfigPath);
     ParseController.parse(argv.source, argv.destination+'/'+filename, config);
+  }).catch(function(e){
+    console.log('> ',e);
+  });
+});
+
+yargs.command('filter <source> [destination]','Filter your delimited flat files', function(yargs){
+  yargs.positional('source', {
+    describe: 'Path to source file to be filtered.',
+    type: 'string'
+  }).positional('destination', {
+    describe: 'Path to destination to place filtered file.',
+    type: 'string',
+    default: process.cwd()
+  });
+}, function(argv){
+  var resolvedConfigPath;
+
+  FileUtil.checkFile(argv.source).then(function(){
+    return FileUtil.checkDirectory(argv.destination);
+  }).then(function(){
+    resolvedConfigPath = process.cwd()+'/'+ConfigController.FILENAME;
+    if(argv.config){
+      resolvedConfigPath = argv.config;
+      if(argv.config.charAt(0) === '.'){
+        resolvedConfigPath = process.cwd() + '/' + resolvedConfigPath;
+      }
+    }
+    return FileUtil.checkFile(resolvedConfigPath);
+  }).then(function(){
+    var filename = Path.basename(argv.source);
+    var filenameSplit = filename.split('.');
+    filename = filenameSplit[0]+'-etlbot-'+Date.now()+'.'+filenameSplit[1];
+    
+    var config = ConfigController.resolveConfig(resolvedConfigPath);
+    var cachePath = Path.join(process.cwd(),CacheController.FOLDERNAME);
+    var cache;
+    if(argv.cache){
+      cachePath = argv.cache;
+      if(argv.config.charAt(0) === '.'){
+        cachePath = process.cwd() + '/' + cachePath;
+      }
+    }
+    FileUtil.checkDirectory(cachePath).then(function(){
+      console.log('> Existing cache directory found', cachePath);
+      cache = new FileStore(cachePath);
+    }).catch(function(e){
+      console.log('> cache not found', cachePath);
+    }).then(function(){
+      FilterController.parse(argv.source, argv.destination+'/'+filename, config, cache);
+    });
   }).catch(function(e){
     console.log('> ',e);
   });
@@ -110,6 +162,11 @@ yargs.command('config [destination]', 'Create a configuration file for transform
 yargs.option('config', {
   alias: 'c',
   describe: 'Path to configuration file.  If none is provided the current working directory will be used.'
+});
+
+yargs.option('cache', {
+  alias: 'm',
+  describe: 'Path to cache folder.  If none is provided the current working directory will be used /__etlbotcache'
 });
 
 
