@@ -24,7 +24,40 @@ var DefaultConfig = {
        *  }
        */
     ]
-  }
+  },
+  cache: {
+    fieldMap: [
+      /**
+       *  {
+       *    key: 'cacheKey',
+       *    value: function(rowObj, cache){
+       *      return // value to cache
+       *    },
+       *    staticKey: true
+       *  },{
+       *    key: function(rowObj, cache){
+       *      return // cache key
+       *    },
+       *    value: function(rowObj, cache){
+       *      return // value to cache
+       *    }
+       *  },{
+       *    key: 'oldCacheKeyReference'
+       *    value: function(rowObj, cache){
+       *      return // value to cache
+       *    }
+       *  },{
+       *    key: 'anotherCacheKeyName',
+       *    value: 10,
+       *    static: true
+       *  },{
+       *    key: 'oneMoreCacheKeyName',
+       *    value: 'originalKeyName'
+       *  }
+       */
+    ]
+  },
+  filter: []
 };
 
 module.exports = DefaultConfig;

@@ -7,8 +7,11 @@ var yargs = require('yargs');
 var FileUtil = require('./lib/utils/file');
 var ParseController = require('./lib/controllers/parser');
 var ConfigController = require('./lib/controllers/config');
+var CacheController = require('./lib/controllers/cache');
+const Deferred = require('./lib/models/deferred');
+const FS = require('fs');
 
-yargs.command('transform <source> [destination]','Transform your flat delimited flat files', function(yargs){
+yargs.command('transform <source> [destination]','Transform your delimited flat files', function(yargs){
   yargs.positional('source', {
     describe: 'Path to source file to be transformed.',
     type: 'string'
@@ -38,6 +41,53 @@ yargs.command('transform <source> [destination]','Transform your flat delimited 
     
     var config = ConfigController.resolveConfig(resolvedConfigPath);
     ParseController.parse(argv.source, argv.destination+'/'+filename, config);
+  }).catch(function(e){
+    console.log('> ',e);
+  });
+});
+
+yargs.command('cache <source> [destination]', 'Build a cache of key value pairs based on a delimited file to be used in subsequent ETL steps.', function(yargs){
+  yargs.positional('source', {
+    describe: 'Path to source file to be parsed.',
+    type: 'string'
+  }).positional('destination', {
+    describe: 'Path to destination to place cache.',
+    type: 'string'
+  });
+}, function(argv){
+  var resolvedConfigPath;
+  var resolvedCachePath;
+
+  FileUtil.checkFile(argv.source).then(function(){
+    var def = new Deferred();
+    resolvedCachePath = argv.destination;
+    if(!resolvedCachePath){
+      resolvedCachePath = Path.join(process.cwd(),CacheController.FOLDERNAME);
+      console.log('> No cache directory provided. Using default:', resolvedCachePath);
+    }
+
+    FileUtil.checkDirectory(resolvedCachePath).then(function(){
+      console.log('> Existing cache directory found', resolvedCachePath);
+      def.resolve();
+    }).catch(function(e){
+      console.log('> directory not found', resolvedCachePath);
+      console.log('> creating cache directory', resolvedCachePath);
+      FS.mkdirSync(resolvedCachePath);
+      def.resolve();
+    });
+    return def.promise;
+  }).then(function(){
+    resolvedConfigPath = process.cwd()+'/'+ConfigController.FILENAME;
+    if(argv.config){
+      resolvedConfigPath = argv.config;
+      if(argv.config.charAt(0) === '.'){
+        resolvedConfigPath = process.cwd() + '/' + resolvedConfigPath;
+      }
+    }
+    return FileUtil.checkFile(resolvedConfigPath);
+  }).then(function(){
+    var config = ConfigController.resolveConfig(resolvedConfigPath);
+    CacheController.build(argv.source, resolvedCachePath, config);
   }).catch(function(e){
     console.log('> ',e);
   });
