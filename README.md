@@ -10,6 +10,20 @@ $ npm install -g etlbot
 
 ## Basic Usage
 
+### config
+
+Create an instance of a configuration file from the built in template.
+
+```bash
+$ etlbot config [destination]
+```
+
+**Parameters**
+
+| Name | Optional | Example | Description |
+| ---- | -------- | ------- | ----------- |
+| destination | true | `./mystuffFolder` | Path to destination folder to which an instance of the templated configuration file will be created. |
+
 ### transform
 
 Transform delimited flat files from specified source using configuration file.
@@ -30,19 +44,6 @@ $ etlbot transform <source> [destination] --config=[path]
 | ---- | -------- | ------- | ----------- |
 | -c, --config | true | `--config=../pathToConfig/etlbot_config.js` | Optional path to configuration file defining the transformation.  Note if a configuration file path is not provided etlbot will look in the current working directory for etlbot_config.js. |
 
-### config
-
-Create an instance of a configuration file from the built in template.
-
-```bash
-$ etlbot config [destination]
-```
-
-**Parameters**
-
-| Name | Optional | Example | Description |
-| ---- | -------- | ------- | ----------- |
-| destination | true | `./mystuffFolder` | Path to destination folder to which an instance of the templated configuration file will be created. |
 
 ## Configuration File Example
 
