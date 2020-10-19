@@ -44,6 +44,46 @@ $ etlbot transform <source> [destination] --config=[path]
 | ---- | -------- | ------- | ----------- |
 | -c, --config | true | `--config=../pathToConfig/etlbot_config.js` | Optional path to configuration file defining the transformation.  Note if a configuration file path is not provided etlbot will look in the current working directory for etlbot_config.js. |
 
+### cache
+
+Build a cache of key value pairs based on a delimited file to be used in subsequent ETL steps.
+
+```bash
+$ etlbot cache <source> [destination] --config=[path]
+```
+
+**Parameters**
+
+| Name | Optional | Example | Description |
+| ---- | -------- | ------- | ----------- |
+| source | false | `../listOfStuff.csv` | Path to source file to parse from. |
+| destination | true | `./mystuffFolder` | Path to cache destination folder to which on disk cache is placed.  This is because with large datasets, purely in memory cache could cause you to run out of memory.  Note that if you do not provide a destination path the current working directory will be used to create a cache directory at `__etlbotcache`. |
+
+**Options**
+| Name | Optional | Example | Description |
+| ---- | -------- | ------- | ----------- |
+| -c, --config | true | `--config=../pathToConfig/etlbot_config.js` | Optional path to configuration file defining the transformation.  Note if a configuration file path is not provided etlbot will look in the current working directory for `etlbot_config.js`. |
+
+### filter
+
+Filter a specified delimited flat using a configuration file into a subset of the source file.
+
+```bash
+$ etlbot filter <source> [destination] --config=[path] --cache=[path]
+```
+
+**Parameters**
+
+| Name | Optional | Example | Description |
+| ---- | -------- | ------- | ----------- |
+| source | false | `../listOfStuff.csv` | Path to source file to parse from. |
+| destination | true | `./mystuffFolder` | Path to destination folder to which the filtered file will be placed.  Note that if you do not provide a destination path the current working directory will be used. |
+
+**Options**
+| Name | Optional | Example | Description |
+| ---- | -------- | ------- | ----------- |
+| -c, --config | true | `--config=../pathToConfig/etlbot_config.js` | Optional path to configuration file defining the transformation.  Note if a configuration file path is not provided etlbot will look in the current working directory for `etlbot_config.js`. |
+| -m, --cache | true | `--cache=../pathToCache` | Optional path to cache folder.  Note if a cache path is not provided etlbot will look in the current working directory for `__etlbotcache`. |
 
 ## Configuration File Example
 
@@ -73,6 +113,33 @@ var DefaultConfig = {
         value: 'sourceKeyName'
       }
     ]
+  },
+  cache: {
+    {
+      key: 'oldCacheKeyReference',
+      value: function(rowObj, cache){
+        return // value to cache
+      }
+    },{
+      key: 'cacheKey',
+      staticKey: true,
+      value: function(rowObj, cache){
+        return // value to cache
+      }
+    },{
+      key: function(rowObj, cache){
+        return //cache key
+      },
+      value: function(rowObj, cache){
+        return // value to cache
+      }
+    },{
+      key: 'oneMoreCacheKeyName',
+      value: 'originalKeyName'
+    }
+  },
+  filter: function(rowObj, cache){
+    return // is row valid?
   }
 };
 
