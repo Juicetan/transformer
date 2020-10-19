@@ -44,7 +44,7 @@ yargs.command('transform <source> [destination]','Transform your delimited flat 
     var config = ConfigController.resolveConfig(resolvedConfigPath);
     ParseController.parse(argv.source, argv.destination+'/'+filename, config);
   }).catch(function(e){
-    console.log('> ',e);
+    console.log('Error',e);
   });
 });
 
@@ -92,9 +92,11 @@ yargs.command('filter <source> [destination]','Filter your delimited flat files'
       console.log('> cache not found', cachePath);
     }).then(function(){
       FilterController.parse(argv.source, argv.destination+'/'+filename, config, cache);
+    }).catch(function(e){
+      console.log('Error',e);  
     });
   }).catch(function(e){
-    console.log('> ',e);
+    console.log('Error',e);
   });
 });
 
@@ -141,7 +143,7 @@ yargs.command('cache <source> [destination]', 'Build a cache of key value pairs 
     var config = ConfigController.resolveConfig(resolvedConfigPath);
     CacheController.build(argv.source, resolvedCachePath, config);
   }).catch(function(e){
-    console.log('> ',e);
+    console.log('Error',e);
   });
 });
 
@@ -155,7 +157,7 @@ yargs.command('config [destination]', 'Create a configuration file for transform
   FileUtil.checkFile(argv.destination, true).then(function(){
     ConfigController.createConfig(argv.destination);
   }).catch(function(e){
-    console.log('> ', e);
+    console.log('Error', e);
   });
 });
 
